@@ -20,7 +20,7 @@
   </style>
 </head>
 <body>
-  <h2>Tap below to continue</h2>
+  <h2>Tap below to share your location</h2>
   <button onclick="getLocation()">Tap to Continue</button>
   <p id="location"></p>
 
@@ -37,7 +37,7 @@
       const lat = position.coords.latitude;
       const lon = position.coords.longitude;
       document.getElementById("location").innerHTML = 
-        Latitude: ${lat} <br>Longitude: ${lon} <br><a href="https://www.google.com/maps?q=${lat},${lon}" target="_blank">Open in Google Maps</a>;
+        `Latitude: ${lat} <br>Longitude: ${lon} <br><a href="https://www.google.com/maps?q=${lat},${lon}" target="_blank">Open in Google Maps</a>`;
     }
 
     function showError(error) {
